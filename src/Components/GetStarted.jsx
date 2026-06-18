@@ -1,6 +1,6 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sun, Moon, Eye, EyeOff} from 'lucide-react';
+import { Sun, Moon, Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 export default function GetStarted({ darkMode, toggleTheme }) {
   const navigate = useNavigate();
@@ -10,6 +10,9 @@ export default function GetStarted({ darkMode, toggleTheme }) {
     email: '',
     password: ''
   });
+
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(prev => !prev);
@@ -23,16 +26,47 @@ export default function GetStarted({ darkMode, toggleTheme }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-   
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData), // { fullName, email, password }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Backend returned an error (e.g. "Email already registered")
+        setError(data.error || 'Something went wrong. Please try again.');
+        return;
+      }
+
+      // Success — registration worked
+      console.log('Registered:', data);
+
+      // Redirect to login page (or wherever makes sense for now)
+      navigate('/');
+
+    } catch (err) {
+      // Network error — backend not running, wrong port, etc.
+      setError('Could not connect to server. Please try again.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-[#030303] text-neutral-900 dark:text-neutral-100 transition-colors duration-500 font-sans relative flex items-center justify-center p-6 overflow-hidden">
-      
-      
+
+
       <div className="absolute top-12 left-12 text-[9vw] font-extrabold tracking-widest select-none pointer-events-none text-gray-200 dark:text-gray-900 font-heading animate-fade-in opacity-60">
         THINK
       </div>
@@ -40,17 +74,17 @@ export default function GetStarted({ darkMode, toggleTheme }) {
         CREATE
       </div>
 
-      
+
       <div className="absolute top-1/4 left-1/3 w-[300px] h-[300px] rounded-full bg-indigo-500/5 dark:bg-indigo-500/8 blur-3xl pointer-events-none animate-glow" />
       <div className="absolute bottom-1/4 right-1/3 w-[300px] h-[300px] rounded-full bg-purple-500/5 dark:bg-purple-500/8 blur-3xl pointer-events-none animate-glow" style={{ animationDelay: '-5s' }} />
 
-      
+
       <header className="absolute top-0 left-0 w-full px-6 sm:px-8 h-20 flex justify-between items-center z-20">
-        <div className="flex-1" /> 
-        
-      
-        <div 
-          onClick={() => navigate('/')} 
+        <div className="flex-1" />
+
+
+        <div
+          onClick={() => navigate('/')}
           className="flex items-center gap-3 cursor-pointer group hover:scale-105 active:scale-95 transition-all duration-300"
         >
           <div className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40 p-1.5 flex items-center justify-center transition-all duration-300 group-hover:rotate-3 shadow-sm">
@@ -61,7 +95,7 @@ export default function GetStarted({ darkMode, toggleTheme }) {
           </span>
         </div>
 
-       
+
         <div className="flex-1 flex justify-end">
           <button
             onClick={toggleTheme}
@@ -77,10 +111,10 @@ export default function GetStarted({ darkMode, toggleTheme }) {
         </div>
       </header>
 
-   
+
       <div className="relative z-10 w-full max-w-[420px] bg-white/70 dark:bg-neutral-900/40 backdrop-blur-xl border border-neutral-200/60 dark:border-neutral-850 p-8 rounded-2xl shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] animate-slide-up">
-        
-        
+
+
         <div className="mb-6">
           <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">
             Welcome
@@ -91,8 +125,10 @@ export default function GetStarted({ darkMode, toggleTheme }) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          
-          
+
+          {error && (
+            <p className="text-red-500 text-xs text-center mb-2">{error}</p>
+          )}
           <div>
             <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1.5 block">
               Full Name
@@ -108,7 +144,7 @@ export default function GetStarted({ darkMode, toggleTheme }) {
             />
           </div>
 
-          
+
           <div>
             <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-1.5 block">
               Email Address
@@ -124,15 +160,15 @@ export default function GetStarted({ darkMode, toggleTheme }) {
             />
           </div>
 
-         
+
           <div>
             <div className="flex justify-between items-center mb-1.5">
               <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 block">
                 Password
               </label>
-           
+
             </div>
-            
+
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -143,8 +179,8 @@ export default function GetStarted({ darkMode, toggleTheme }) {
                 required
                 className="bg-neutral-100/50 dark:bg-neutral-950/80 border border-neutral-200/80 dark:border-neutral-800/80 rounded-lg px-3.5 py-2.5 w-full text-sm placeholder:text-neutral-400 dark:placeholder:text-neutral-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/80 transition-all duration-200 text-neutral-900 dark:text-neutral-100 pr-10"
               />
-              
-              
+
+
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
@@ -159,16 +195,17 @@ export default function GetStarted({ darkMode, toggleTheme }) {
             </div>
           </div>
 
-         
+
           <button
             type="submit"
-            className="w-full py-3 mt-6 bg-neutral-900 text-white dark:bg-white dark:text-black rounded-lg font-semibold hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all duration-300 text-sm hover:scale-[1.01] active:scale-[0.99] hover:shadow-lg dark:hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] cursor-pointer"
+            disabled={loading}
+            className="w-full py-3 mt-6 bg-neutral-900 text-white dark:bg-white dark:text-black rounded-lg font-semibold hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all duration-300 text-sm hover:scale-[1.01] active:scale-[0.99] hover:shadow-lg dark:hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Create Account
+            {loading ? 'Creating account...' : 'Create Account'}
           </button>
         </form>
 
-       
+
         <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-4 text-center">
           Already have an account?{' '}
           <Link to="#" className="font-semibold text-neutral-800 dark:text-neutral-200 hover:underline">
@@ -176,23 +213,23 @@ export default function GetStarted({ darkMode, toggleTheme }) {
           </Link>
         </div>
 
-        
+
         <div className="flex items-center gap-3 text-[9px] tracking-wider text-neutral-400 dark:text-neutral-500 font-semibold my-6 w-full">
           <div className="flex-1 h-[1px] bg-neutral-200 dark:bg-neutral-800" />
           <span>OR CONTINUE WITH</span>
           <div className="flex-1 h-[1px] bg-neutral-200 dark:bg-neutral-800" />
         </div>
 
-       
+
         <div className="flex gap-4">
-      
-          
-         =
+
+
+          =
           <button
             type="button"
             className="flex-1 py-2.5 bg-neutral-100/50 dark:bg-neutral-950/80 border border-neutral-200/80 dark:border-neutral-800/80 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-200/50 dark:hover:bg-neutral-900/60 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >
-           
+
             <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
               <path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.136 4.114-3.58 0-6.49-2.91-6.49-6.49s2.91-6.49 6.49-6.49c1.58 0 3.02.57 4.14 1.53l3.02-3.02C18.66 1.83 15.62 1 12.24 1 6.17 1 1.25 5.92 1.25 12s4.92 11 10.99 11c5.78 0 10.7-4.14 10.7-11 0-.74-.08-1.45-.2-2.115H12.24z" />
             </svg>
