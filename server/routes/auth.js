@@ -85,15 +85,46 @@ router.post("/register", async (req, res) => {
     
     saveDatabase();
 
-    
     const newUser = getOne(db, "SELECT id FROM users WHERE email = ?", [email]);
 
+    // Seed default tasks
+    const defaultTasks = [
+      { title: "Review design system architecture", completed: 0, due_bucket: "today", duration: "4h Focus", tag: "Design" },
+      { title: "Morning meditation session", completed: 1, due_bucket: "today", duration: "15m Focus", tag: "" },
+      { title: "Draft quarterly performance report", completed: 0, due_bucket: "today", duration: "3h Focus", tag: "Business" },
+      { title: "Prepare for dashboard presentation", completed: 0, due_bucket: "upcoming", duration: "1h Focus", tag: "Business" },
+      { title: "Refactor state management in dashboard", completed: 0, due_bucket: "upcoming", duration: "2h Focus", tag: "Design" },
+      { title: "Learn Rust web assembly frameworks", completed: 0, due_bucket: "someday", duration: "12h Focus", tag: "Personal" },
+      { title: "Explore Tailwind CSS v4 new directives", completed: 0, due_bucket: "someday", duration: "3h Focus", tag: "Design" }
+    ];
+
+    for (const task of defaultTasks) {
+      db.run(
+        "INSERT INTO tasks (user_id, title, completed, due_bucket, duration, tag) VALUES (?, ?, ?, ?, ?, ?)",
+        [newUser.id, task.title, task.completed, task.due_bucket, task.duration, task.tag]
+      );
+    }
+
+    // Seed default notes
+    const defaultNotes = [
+      { title: "🚀 Getting Started with Good Notes", content: "Welcome to Good Notes! This is a premium workspace for organized thinking. Here you can capture notes, choose beautiful color card tags, and mark notes as favorites by clicking the star icon. Start by creating a new note!", is_favorite: 1, color: "#818cf8" },
+      { title: "💡 Project Brainstorming Ideas", content: "1. Build an AI-driven notes categorization engine.\n2. Design clean, minimalist typography themes.\n3. Add offline database synchronization.", is_favorite: 0, color: "#10b981" },
+      { title: "📅 Weekly Review Checklist", content: "- Review 'Smart To-Do' list completed tasks.\n- Clear inbox and archive old files.\n- Focus on high-impact design architectures.", is_favorite: 0, color: "#f59e0b" }
+    ];
+
+    for (const note of defaultNotes) {
+      db.run(
+        "INSERT INTO notes (user_id, title, content, is_favorite, color) VALUES (?, ?, ?, ?, ?)",
+        [newUser.id, note.title, note.content, note.is_favorite, note.color]
+      );
+    }
     
+    saveDatabase();
+
     return res.status(201).json({
       id: newUser.id,
       fullName,
       email,
-      
     });
   } catch (err) {
     

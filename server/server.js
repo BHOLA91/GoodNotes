@@ -1,5 +1,5 @@
-
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
 const express = require("express");
 const cors = require("cors");
@@ -7,6 +7,8 @@ const { initDatabase } = require("./db");
 
 
 const authRoutes = require("./routes/auth");
+const tasksRoutes = require("./routes/tasks");
+const notesRoutes = require("./routes/notes");
 
 
 const app = express();
@@ -24,6 +26,8 @@ app.use(express.json());
 
 
 app.use("/api/auth", authRoutes);
+app.use("/api/tasks", tasksRoutes);
+app.use("/api/notes", notesRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "GoodNotes server is running!" });

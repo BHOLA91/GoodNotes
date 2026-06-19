@@ -25,9 +25,9 @@ export default function Navbar({ darkMode, toggleTheme }) {
 
           
           <div className="flex items-center gap-5 sm:gap-6">
-            <button className="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors duration-200 cursor-pointer">
+            <Link to="/login" className="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors duration-200 cursor-pointer decoration-transparent">
               Login
-            </button>
+            </Link>
             
           
             <button

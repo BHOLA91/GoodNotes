@@ -19,7 +19,6 @@ function authMiddleware(req, res, next) {
 
 
     req.user = decoded;
-    r
     next();
   } catch (err) {
 

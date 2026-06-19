@@ -42,6 +42,34 @@ async function initDatabase() {
     )
   `);
 
+  db.run(`
+    CREATE TABLE IF NOT EXISTS tasks (
+      id          INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id     INTEGER NOT NULL,
+      title       TEXT    NOT NULL,
+      completed   INTEGER DEFAULT 0,
+      due_bucket  TEXT    DEFAULT 'today',
+      duration    TEXT,
+      tag         TEXT,
+      created_at  TEXT    DEFAULT (datetime('now')),
+      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS notes (
+      id          INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id     INTEGER NOT NULL,
+      title       TEXT    NOT NULL,
+      content     TEXT,
+      is_favorite INTEGER DEFAULT 0,
+      color       TEXT    DEFAULT '#6366f1',
+      created_at  TEXT    DEFAULT (datetime('now')),
+      updated_at  TEXT    DEFAULT (datetime('now')),
+      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+  `);
+
   saveDatabase();
 
   return db;

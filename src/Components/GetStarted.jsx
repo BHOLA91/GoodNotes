@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sun, Moon, Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 export default function GetStarted({ darkMode, toggleTheme }) {
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -37,22 +43,22 @@ export default function GetStarted({ darkMode, toggleTheme }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData), // { fullName, email, password }
+        body: JSON.stringify(formData), 
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        // Backend returned an error (e.g. "Email already registered")
+        
         setError(data.error || 'Something went wrong. Please try again.');
         return;
       }
 
-      // Success — registration worked
+     
       console.log('Registered:', data);
 
-      // Redirect to login page (or wherever makes sense for now)
-      navigate('/');
+     
+      navigate('/dashboard');
 
     } catch (err) {
       // Network error — backend not running, wrong port, etc.
@@ -208,7 +214,7 @@ export default function GetStarted({ darkMode, toggleTheme }) {
 
         <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-4 text-center">
           Already have an account?{' '}
-          <Link to="#" className="font-semibold text-neutral-800 dark:text-neutral-200 hover:underline">
+          <Link to="/login" className="font-semibold text-neutral-800 dark:text-neutral-200 hover:underline">
             Sign In
           </Link>
         </div>
