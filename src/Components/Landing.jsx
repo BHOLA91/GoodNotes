@@ -14,7 +14,7 @@ const Landing = () => {
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-neutral-900 dark:text-white font-heading leading-[1.1] sm:leading-[1.05]">
             Your Thoughts,
           </h1>
-          <h2 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mt-2 sm:mt-3 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-300 dark:via-indigo-200 dark:to-purple-300 bg-clip-text text-transparent font-heading leading-[1.1] sm:leading-[1.05]">
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mt-2 sm:mt-3 bg-blue-600 bg-clip-text text-transparent font-heading leading-[1.1] sm:leading-[1.05]">
             Beautifully Organized.
           </h2>
         </div>

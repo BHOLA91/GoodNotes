@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, ArrowRight, ArrowLeft, Shield, Zap, Fingerprint, Sun, Moon } from 'lucide-react';
+import { Mail, ArrowRight, ArrowLeft, Shield, Zap, Fingerprint } from 'lucide-react';
 
-export default function Recovery({ darkMode, toggleTheme }) {
+export default function Recovery() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ export default function Recovery({ darkMode, toggleTheme }) {
     setError('');
     setSuccess(false);
 
-    // Simple email format check
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Please enter a valid email address.');
@@ -40,17 +40,17 @@ export default function Recovery({ darkMode, toggleTheme }) {
     
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full bg-indigo-500/5 dark:bg-indigo-500/5 blur-3xl pointer-events-none animate-glow" />
 
-      {/* Header */}
+      
       <header className="w-full px-6 sm:px-12 md:px-16 lg:px-24 h-20 flex justify-between items-center z-25 border-b border-neutral-200/40 dark:border-neutral-900/50 bg-white/40 dark:bg-[#030303]/40 backdrop-blur-md">
         
-        {/* Brand/Logo Section with Hamburger */}
+        
         <div className="flex items-center gap-4 select-none">
           <button 
             type="button" 
             className="p-1.5 rounded-lg hover:bg-neutral-200/50 dark:hover:bg-neutral-900 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors duration-200 cursor-pointer"
             aria-label="Menu"
           >
-            {/* Hamburger Icon */}
+            
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
@@ -63,7 +63,7 @@ export default function Recovery({ darkMode, toggleTheme }) {
           </Link>
         </div>
 
-        {/* Right Navigation: Support Link + Theme Toggle */}
+        
         <div className="flex items-center gap-5 sm:gap-6">
           <Link 
             to="#" 
@@ -71,28 +71,14 @@ export default function Recovery({ darkMode, toggleTheme }) {
           >
             Support
           </Link>
-
-          {/* Theme Toggler Button */}
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="p-2.5 rounded-full hover:bg-neutral-200/50 dark:hover:bg-neutral-950/80 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all duration-300 cursor-pointer border border-transparent hover:border-neutral-200/50 dark:hover:border-neutral-850 relative overflow-hidden active:scale-90"
-            aria-label="Toggle Theme"
-          >
-            {darkMode ? (
-              <Sun className="w-4 h-4 transition-transform duration-500 rotate-0" />
-            ) : (
-              <Moon className="w-4 h-4 transition-transform duration-500 rotate-0" />
-            )}
-          </button>
         </div>
       </header>
 
-      {/* Main Recovery Section */}
+      
       <main className="flex-1 flex items-center justify-center px-6 py-12 relative z-10">
         <div className="w-full max-w-[420px] flex flex-col items-center">
           
-          {/* Recovery Card */}
+          
           <div className="w-full bg-white/80 dark:bg-[#0d0d0d]/80 backdrop-blur-xl border border-neutral-200 dark:border-neutral-900 p-8 rounded-2xl shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-slide-up">
             
             <h1 className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white font-heading mb-3">
