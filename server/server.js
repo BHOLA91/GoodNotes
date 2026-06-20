@@ -1,5 +1,5 @@
 const path = require("path");
-require("dotenv").config({ path: path.join(__dirname, "../.env") });
+require("dotenv").config({ path: path.join(__dirname, "./.env") });
 
 const express = require("express");
 const cors = require("cors");
@@ -13,11 +13,21 @@ const notesRoutes = require("./routes/notes");
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.FRONTEND_URL
+].filter(Boolean);
 
 app.use(
   cors({
-    origin: "http://localhost:5173", 
-    credentials: true,               
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
   })
 );
 

@@ -17,6 +17,7 @@ import {
   FileText,
   Heart
 } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ export default function Dashboard() {
     try {
       setLoading(true);
       
-      const tasksRes = await fetch('http://localhost:5000/api/tasks', {
+      const tasksRes = await fetch(`${API_URL}/api/tasks`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!tasksRes.ok && tasksRes.status === 401) {
@@ -106,7 +107,7 @@ export default function Dashboard() {
       setTasks(tasksData);
 
       
-      const notesRes = await fetch('http://localhost:5000/api/notes', {
+      const notesRes = await fetch(`${API_URL}/api/notes`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (notesRes.ok) {
@@ -131,7 +132,7 @@ export default function Dashboard() {
   const toggleTaskCompletion = async (taskId, currentStatus) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -154,7 +155,7 @@ export default function Dashboard() {
     if (!confirm('Are you sure you want to delete this task?')) return;
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const response = await fetch(`${API_URL}/api/tasks/${taskId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -174,7 +175,7 @@ export default function Dashboard() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/tasks', {
+      const response = await fetch(`${API_URL}/api/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -247,7 +248,7 @@ export default function Dashboard() {
       const token = localStorage.getItem('token');
       if (editingNote) {
         
-        const response = await fetch(`http://localhost:5000/api/notes/${editingNote.id}`, {
+        const response = await fetch(`${API_URL}/api/notes/${editingNote.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -267,7 +268,7 @@ export default function Dashboard() {
         setNotes(prev => prev.map(n => n.id === editingNote.id ? updated : n));
       } else {
         
-        const response = await fetch('http://localhost:5000/api/notes', {
+        const response = await fetch(`${API_URL}/api/notes`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -296,7 +297,7 @@ export default function Dashboard() {
     e.stopPropagation();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/notes/${note.id}`, {
+      const response = await fetch(`${API_URL}/api/notes/${note.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -320,7 +321,7 @@ export default function Dashboard() {
     if (!confirm('Are you sure you want to delete this note?')) return;
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/notes/${noteId}`, {
+      const response = await fetch(`${API_URL}/api/notes/${noteId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
