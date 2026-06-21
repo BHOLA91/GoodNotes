@@ -633,7 +633,7 @@ export default function Dashboard() {
                                   </select>
                                 </div>
 
-                                <div className="flex gap-2">
+                                <div className="flex flex-wrap gap-2 w-full">
                                   <button
                                     onClick={() => setShowAddForm(prev => ({ ...prev, today: false }))}
                                     className="px-3 py-1.5 rounded-lg text-xs font-semibold text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-900 cursor-pointer"
